@@ -16,7 +16,6 @@ contract("Crowdfunding", (accounts) => {
       assert.notEqual(address, "");
       assert.notEqual(address, null);
       assert.notEqual(address, undefined);
-      assert.EqualTo(address.length, 8);
     });
   });
 });
