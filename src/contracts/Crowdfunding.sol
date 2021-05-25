@@ -2,9 +2,9 @@
 pragma solidity >=0.4.16 <0.9.0;
 
 contract Crowdfunding {
-  string public name;
+    string public name;
 
-  constructor() public {
-    name = "Marketplace for crowd funding";
-  }
+    constructor() public {
+        name = "Marketplace for crowd funding";
+    }
 }
