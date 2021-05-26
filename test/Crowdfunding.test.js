@@ -2,6 +2,8 @@
 /* eslint-disable no-undef */
 const Crowdfunding = artifacts.require("Crowdfunding");
 
+require('chai').use(require('chai-as-promised')).should()
+
 // contract("Crowdfunding", (accounts) => { //old style
 contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => { // revised style
   let crowdfunding;
@@ -32,7 +34,7 @@ contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => { // revised style
       projectCount = await crowdfunding.projectCount();
     });
     it("creates products", async ()=>{
-      // SUCCESS
+      // SUCCESS TESTS
       assert.equal(projectCount, 1);
       const event = result.logs[0].args; // pull from result logs
       assert.equal(event.id.toNumber(), projectCount.toNumber(), 'id is correct');
@@ -44,12 +46,13 @@ contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => { // revised style
       assert.equal(event.balance, 0, "Project Balance is set to 0");
       // assert.equal(event.owner, accounts[0], 'Owner is correct'); // old style
       assert.equal(event.owner, deployer, 'Owner is correct'); // revised style
-      
-      // Failure
-
-
+      //Failure : Project should have name
+      await crowdfunding.createProject("", "Test Desc", "1622420104", web3.utils.toWei("1", "Ether"), {from : deployer} ).should.be.rejected;
+      //Failure : Project should have target
+      await crowdfunding.createProject("Test Name", "Test Desc", "1622420104", 0, {from : deployer} ).should.be.rejected;
+      //Failure : Project should have endDate
+      await crowdfunding.createProject("Test Name", "Test Desc", "", web3.utils.toWei("1", "Ether"), {from : deployer} ).should.be.rejected;
     });
   });
-
 
 });
