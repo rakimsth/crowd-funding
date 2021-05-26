@@ -52,7 +52,7 @@ function App() {
         {currentAccount ? (
           <Button variant="light">{currentAccount}</Button>
         ) : (
-          <Button variant="light">N/A</Button>
+          <Button variant="danger">N/A</Button>
         )}
       </nav>
       <div className="container-fluid mt-5">

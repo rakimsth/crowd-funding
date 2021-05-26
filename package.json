@@ -61,10 +61,6 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx}": [
-      "eslint",
-      "pretty-quick — staged",
-      "git add"
-    ]
+    "*.{js,jsx,sol}": "prettier --write **/*.js **/*.sol"
   }
 }
