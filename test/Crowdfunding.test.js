@@ -1,14 +1,15 @@
 /* eslint-disable jest/valid-describe */
 
-const { assert } = require('chai');
+const { assert } = require("chai");
 
 /* eslint-disable no-undef */
 const Crowdfunding = artifacts.require("Crowdfunding");
 
-require('chai').use(require('chai-as-promised')).should()
+require("chai").use(require("chai-as-promised")).should();
 
 // contract("Crowdfunding", (accounts) => { //old style
-contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => { // revised style
+contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => {
+  // revised style
   let crowdfunding;
 
   before(async () => {
@@ -24,8 +25,8 @@ contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => { // revised style
       assert.notEqual(address, undefined);
     });
 
-    it("has a name", async ()=>{
-      const name =  await crowdfunding.name();
+    it("has a name", async () => {
+      const name = await crowdfunding.name();
       assert.equal(name, "Marketplace for crowd funding");
     });
   });
@@ -33,75 +34,147 @@ contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => { // revised style
   describe("projects", async () => {
     let result, projectCount;
     before(async () => {
-      result = await crowdfunding.createProject("Test Name", "Test Desc", "1622420104", web3.utils.toWei("1", "Ether"), {from : deployer} );
+      result = await crowdfunding.createProject(
+        "Test Name",
+        "Test Desc",
+        "1622420104",
+        web3.utils.toWei("1", "Ether"),
+        { from: deployer }
+      );
       projectCount = await crowdfunding.projectCount();
     });
 
-    it("creates projects", async ()=>{
+    it("creates projects", async () => {
       // SUCCESS TESTS
       assert.equal(projectCount, 1);
       const event = result.logs[0].args; // pull from result logs
-      assert.equal(event.id.toNumber(), projectCount.toNumber(), 'id is correct');
-      assert.equal(event.name, 'Test Name', "Name is correct");
-      assert.equal(event.desc, 'Test Desc', "Description is correct");
-      assert.equal(event.target, web3.utils.toWei("1", "Ether"), "Target is correct");
-      assert.equal(event.endDate, '1622420104', "Project Close Date is correct");
+      assert.equal(
+        event.id.toNumber(),
+        projectCount.toNumber(),
+        "id is correct"
+      );
+      assert.equal(event.name, "Test Name", "Name is correct");
+      assert.equal(event.desc, "Test Desc", "Description is correct");
+      assert.equal(
+        event.target,
+        web3.utils.toWei("1", "Ether"),
+        "Target is correct"
+      );
+      assert.equal(
+        event.endDate,
+        "1622420104",
+        "Project Close Date is correct"
+      );
       assert.equal(event.exists, true, "Project Status is true");
       assert.equal(event.balance, 0, "Project Balance is set to 0");
       // assert.equal(event.owner, accounts[0], 'Owner is correct'); // old style
-      assert.equal(event.owner, deployer, 'Owner is correct'); // revised style
+      assert.equal(event.owner, deployer, "Owner is correct"); // revised style
       //Failure : Project should have name
-      await crowdfunding.createProject("", "Test Desc", "1622420104", web3.utils.toWei("1", "Ether"), {from : deployer} ).should.be.rejected;
+      await crowdfunding.createProject(
+        "",
+        "Test Desc",
+        "1622420104",
+        web3.utils.toWei("1", "Ether"),
+        { from: deployer }
+      ).should.be.rejected;
       //Failure : Project should have target
-      await crowdfunding.createProject("Test Name", "Test Desc", "1622420104", 0, {from : deployer} ).should.be.rejected;
+      await crowdfunding.createProject(
+        "Test Name",
+        "Test Desc",
+        "1622420104",
+        0,
+        { from: deployer }
+      ).should.be.rejected;
       //Failure : Project should have endDate
-      await crowdfunding.createProject("Test Name", "Test Desc", "", web3.utils.toWei("1", "Ether"), {from : deployer} ).should.be.rejected;
+      await crowdfunding.createProject(
+        "Test Name",
+        "Test Desc",
+        "",
+        web3.utils.toWei("1", "Ether"),
+        { from: deployer }
+      ).should.be.rejected;
     });
 
-    it("lists projects", async ()=>{
+    it("lists projects", async () => {
       // SUCCESS TESTS
       const project = await crowdfunding.projects(projectCount);
-      assert.equal(project.id.toNumber(), projectCount.toNumber(), 'id is correct');
-      assert.equal(project.name, 'Test Name', "Name is correct");
-      assert.equal(project.desc, 'Test Desc', "Description is correct");
-      assert.equal(project.target, web3.utils.toWei("1", "Ether"), "Target is correct");
-      assert.equal(project.endDate, '1622420104', "Project Close Date is correct");
+      assert.equal(
+        project.id.toNumber(),
+        projectCount.toNumber(),
+        "id is correct"
+      );
+      assert.equal(project.name, "Test Name", "Name is correct");
+      assert.equal(project.desc, "Test Desc", "Description is correct");
+      assert.equal(
+        project.target,
+        web3.utils.toWei("1", "Ether"),
+        "Target is correct"
+      );
+      assert.equal(
+        project.endDate,
+        "1622420104",
+        "Project Close Date is correct"
+      );
       assert.equal(project.exists, true, "Project Status is true");
       assert.equal(project.balance, 0, "Project Balance is set to 0");
       //FAILURE TESTS
     });
 
-    it("fund project", async ()=>{
+    it("fund project", async () => {
       // SUCCESS TESTS
       //Another User Funded the project
-      const result = await crowdfunding.fundProject(projectCount, {from : secondAcc, value: web3.utils.toWei("1", "Ether") });
+      const result = await crowdfunding.fundProject(projectCount, {
+        from: secondAcc,
+        value: web3.utils.toWei("1", "Ether"),
+      });
       const event = result.logs[0].args; // pull from result logs
-      assert.equal(event.id.toNumber(), projectCount.toNumber(), 'id is correct');
-      assert.equal(event.name, 'Test Name', "Name is correct");
-      assert.equal(event.target, web3.utils.toWei("1", "Ether"), "Target is correct");
-      assert.equal(event.endDate, '1622420104', "Project Close Date is correct");
+      assert.equal(
+        event.id.toNumber(),
+        projectCount.toNumber(),
+        "id is correct"
+      );
+      assert.equal(event.name, "Test Name", "Name is correct");
+      assert.equal(
+        event.target,
+        web3.utils.toWei("1", "Ether"),
+        "Target is correct"
+      );
+      assert.equal(
+        event.endDate,
+        "1622420104",
+        "Project Close Date is correct"
+      );
       assert.equal(event.exists, true, "Project Status is true");
-      assert.equal(event.balance, web3.utils.toWei("1", "Ether"), "Project Balance is set to 1");
-      assert.equal(event.owner, secondAcc, 'Contributor is not Owner');
+      assert.equal(
+        event.balance,
+        web3.utils.toWei("1", "Ether"),
+        "Project Balance is set to 1"
+      );
+      assert.equal(event.owner, secondAcc, "Contributor is not Owner");
       //FAILURE TESTS : Send 0 Ether
-      await crowdfunding.fundProject(projectCount, {from : secondAcc, value: 0 }).should.be.rejected;
-
+      await crowdfunding.fundProject(projectCount, {
+        from: secondAcc,
+        value: 0,
+      }).should.be.rejected;
     });
 
-    it("close project", async ()=>{
+    it("close project", async () => {
       // SUCCESS TESTS
-      const result = await crowdfunding.closeProject(projectCount, {from : deployer });
+      const result = await crowdfunding.closeProject(projectCount, {
+        from: deployer,
+      });
       const event = result.logs[0].args; // pull from result logs
-      assert.equal(event.id.toNumber(), projectCount.toNumber(), 'id is correct');
-      assert.equal(event.name, 'Test Name', "Name is correct");
+      assert.equal(
+        event.id.toNumber(),
+        projectCount.toNumber(),
+        "id is correct"
+      );
+      assert.equal(event.name, "Test Name", "Name is correct");
       //FAILURE TESTS : Tries to fund a project that doesnt exists. ie. Project must have valid ID
-      await crowdfunding.fundProject(99, {from : secondAcc, value: web3.utils.toWei("1", "Ether") }).should.be.rejected;
-
+      await crowdfunding.fundProject(99, {
+        from: secondAcc,
+        value: web3.utils.toWei("1", "Ether"),
+      }).should.be.rejected;
     });
-
-
-
-
   });
-
 });
