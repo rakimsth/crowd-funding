@@ -50,14 +50,12 @@
     "eslint-plugin-react": "^7.23.2",
     "ganache-core": "^2.13.2",
     "husky": "^6.0.0",
-    "lint-staged": "^11.0.0",
     "prettier": "^2.3.0",
-    "prettier-plugin-solidity": "^1.0.0-beta.10",
-    "pretty-quick": "^3.1.0"
+    "prettier-plugin-solidity": "^1.0.0-beta.10"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo \"[Husky] pre-commit\""
+      "pre-commit": "yarn pretty"
     }
   }
 }
