@@ -1,4 +1,7 @@
 /* eslint-disable jest/valid-describe */
+
+const { assert } = require('chai');
+
 /* eslint-disable no-undef */
 const Crowdfunding = artifacts.require("Crowdfunding");
 
@@ -80,7 +83,9 @@ contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => { // revised style
       assert.equal(event.exists, true, "Project Status is true");
       assert.equal(event.balance, web3.utils.toWei("1", "Ether"), "Project Balance is set to 1");
       assert.equal(event.owner, secondAcc, 'Contributor is not Owner');
-      //FAILURE TESTS
+      //FAILURE TESTS : Send 0 Ether
+      await crowdfunding.fundProject(projectCount, {from : secondAcc, value: 0 }).should.be.rejected;
+
     });
 
     it("close project", async ()=>{
@@ -89,7 +94,9 @@ contract("Crowdfunding", ([deployer, secondAcc, thirdAcc]) => { // revised style
       const event = result.logs[0].args; // pull from result logs
       assert.equal(event.id.toNumber(), projectCount.toNumber(), 'id is correct');
       assert.equal(event.name, 'Test Name', "Name is correct");
-      //FAILURE TESTS
+      //FAILURE TESTS : Tries to fund a project that doesnt exists. ie. Project must have valid ID
+      await crowdfunding.fundProject(99, {from : secondAcc, value: web3.utils.toWei("1", "Ether") }).should.be.rejected;
+
     });
 
 

@@ -81,18 +81,20 @@ contract Crowdfunding {
         Project memory _project = projects[_id];
         //Fetch the Project Owner
         address _owner = _project.owner;
-        //Check if the Project end Date is greater than now
+        // Make sure the project has valid ID
+        require(_project.id > 0 && _project.id <= projectCount);
+        // Check if the Project end Date is greater than now
         require(block.timestamp < _project.endDate, "Project is closed.");
         // Check if the owner is trying to fund and reject it
         require(_owner != msg.sender, "Owner can't fund the project created by themselves.");
         // Make Sure the Project is active
-        require(_project.exists == true, "Project doesn't exists..");
+        require(_project.exists);
+        //Sent ether must be greater than 0
+        require(msg.value > 0);
         // Fund it
         _project.balance += msg.value;
         // Update the Project
         projects[_id] = _project;
-        //hold the money to the contract until it expires or closes;
-
         // contributors can again send the money
         contributors[_id][msg.sender] += msg.value;
         // Trigger the event
