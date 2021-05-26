@@ -30,7 +30,8 @@ contract('Crowdfunding', ([deployer, secondAcc]) => {
   });
   // Test Project Creation
   describe('projects', async () => {
-    let result; let projectCount;
+    let result;
+    let projectCount;
     before(async () => {
       result = await crowdfunding.createProject(
         'Test Name',
