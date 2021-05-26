@@ -7,7 +7,7 @@ TODO
     - Read a Project : getProjectById
     - Fund an existing Project : fundProject
     - Close the Project manually by owner or if endDate expires : closeProject
-    - Get total Contract Balance : balanceOfContract
+    - Get total Contract Balance : balanceOfProjects
     - Dispatch the ethers to project Owner : dispatchFunds
 */
 contract Crowdfunding {
@@ -123,12 +123,13 @@ contract Crowdfunding {
         emit ProjectEnded(_project.id, _project.name, _project.balance);
     }
 
-    function balanceOfContract() public view returns(uint){
+    function balanceOfProjects() public view returns(uint){
         return address(this).balance;
     }
 
     function dispatchFunds(uint _id) public payable {
         Project memory _project = projects[_id];
-        payable( _project.owner).transfer(_project.balance);
+        payable(_project.owner).transfer(_project.balance);
+        projects[_id] = _project;
     }
 }
