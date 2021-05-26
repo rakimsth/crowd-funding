@@ -57,10 +57,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "lint-staged"
+      "pre-commit": "prettier --write **/*.js **/*.sol"
     }
-  },
-  "lint-staged": {
-    "*.{js,jsx,sol}": "prettier --write **/*.js **/*.sol"
   }
 }
