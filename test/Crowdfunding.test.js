@@ -3,7 +3,7 @@
 const Crowdfunding = artifacts.require("Crowdfunding");
 
 contract("Crowdfunding", (accounts) => {
-  let crowdfunding
+  let crowdfunding;
 
   before(async () => {
     crowdfunding = await Crowdfunding.deployed();
@@ -17,5 +17,24 @@ contract("Crowdfunding", (accounts) => {
       assert.notEqual(address, null);
       assert.notEqual(address, undefined);
     });
+
+    it("has a name", async ()=>{
+      const name =  await crowdfunding.name();
+      assert.equal(name, "Marketplace for crowd funding");
+    });
   });
+
+  describe("projects", async () => {
+    let result, projectCount;
+    before(async () => {
+      result = await crowdfunding.createProject();
+      projectCount = await crowdfunding.projectCount();
+    });
+    it("creates products", async ()=>{
+      // SUCCESS
+      assert.equal(projectCount, 1); 
+    });
+  });
+
+
 });
