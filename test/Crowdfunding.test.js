@@ -57,16 +57,27 @@ contract('Crowdfunding', ([deployer, secondAcc]) => {
       // assert.equal(event.owner, accounts[0], 'Owner is correct'); // old style
       assert.equal(event.owner, deployer, 'Owner is correct'); // revised style
       // Failure : Project should have name
-      await crowdfunding.createProject('', 'Test Desc', '1622420104', web3.utils.toWei('1', 'Ether'), {
-        from: deployer,
-      }).should.be.rejected;
+      await crowdfunding.createProject(
+        '',
+        'Test Desc',
+        '1622420104',
+        web3.utils.toWei('1', 'Ether'),
+        {
+          from: deployer,
+        },
+      ).should.be.rejected;
       // Failure : Project should have target
       await crowdfunding.createProject('Test Name', 'Test Desc', '1622420104', 0, {
         from: deployer,
       }).should.be.rejected;
       // Failure : Project should have endDate
-      await crowdfunding.createProject('Test Name', 'Test Desc', '', web3.utils.toWei('1', 'Ether'), { from: deployer })
-        .should.be.rejected;
+      await crowdfunding.createProject(
+        'Test Name',
+        'Test Desc',
+        '',
+        web3.utils.toWei('1', 'Ether'),
+        { from: deployer },
+      ).should.be.rejected;
     });
 
     it('lists projects', async () => {

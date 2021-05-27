@@ -72,7 +72,16 @@ contract Crowdfunding {
     //Increment Project Count
     projectCount++;
     // Create the project
-    projects[projectCount] = Project(projectCount, _name, _desc, msg.sender, _endDate, true, 0, _target);
+    projects[projectCount] = Project(
+      projectCount,
+      _name,
+      _desc,
+      msg.sender,
+      _endDate,
+      true,
+      0,
+      _target
+    );
     // trigger an event
     emit ProjectCreated(projectCount, _name, _desc, msg.sender, _endDate, true, 0, _target);
   }

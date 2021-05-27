@@ -88,7 +88,9 @@ function App() {
       <Navbar account={currentAccount || ''} />
       <div className="container mt-5">
         <div className="row">
-          <main className="col-lg-12">{loading ? <Loader /> : <Main createProject={createProject} />}</main>
+          <main className="col-lg-12">
+            {loading ? <Loader /> : <Main createProject={createProject} />}
+          </main>
         </div>
       </div>
     </div>
