@@ -11,7 +11,7 @@ import Loader from '../global/Loader';
 import CrowdFunding from '../abis/Crowdfunding.json';
 
 function App() {
-  const [currentAccount, setCurrentAccount] = useState("");
+  const [currentAccount, setCurrentAccount] = useState('');
   const [projectCount, setProjectCount] = useState(0);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -51,18 +51,18 @@ function App() {
     const networkId = await web3.eth.net.getId();
     const networkData = CrowdFunding.networks[networkId];
     // Get abi Data from ABI json file
-    try{
-      const {abi} = CrowdFunding;
-      const {address} = networkData;
+    try {
+      const { abi } = CrowdFunding;
+      const { address } = networkData;
       const marketplace = new web3.eth.Contract(abi, address);
-      setCrowdFunding({marketplace});
+      setCrowdFunding({ marketplace });
       setLoading(false);
-    } catch (e){
+    } catch (e) {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
         text: 'Contract not deployed to detected Network!',
-      })
+      });
     }
     // Set current Account to State
     setCurrentAccount(accounts[0]);
@@ -75,12 +75,10 @@ function App() {
 
   return (
     <div>
-      <Navbar account={currentAccount || ''}/>
+      <Navbar account={currentAccount || ''} />
       <div className="container-fluid mt-5">
         <div className="row">
-          <main className="col-lg-12">
-            { loading ? <Loader />: <Main />}
-          </main>
+          <main className="col-lg-12">{loading ? <Loader /> : <Main />}</main>
         </div>
       </div>
     </div>
