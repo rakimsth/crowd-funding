@@ -15,7 +15,7 @@ import {
   ListGroupItem,
 } from 'react-bootstrap';
 
-function Main({ createProject, projects }) {
+function Main({ createProject, fundProject, projects }) {
   const updatedProject = projects.map((p) => {
     p.percent = Math.round(
       (p.balance
@@ -178,6 +178,13 @@ function Main({ createProject, projects }) {
                       <em> Days Left</em>
                     </ListGroupItem>
                     <ListGroupItem>
+                      Target:&nbsp;
+                      {project && project.target
+                        ? window.web3.utils.fromWei(project.target, 'Ether')
+                        : '-'}
+                      <em> Ethers</em>
+                    </ListGroupItem>
+                    <ListGroupItem>
                       <small className="text-muted">
                         <em style={{ fontSize: '0.9em' }}>
                           By: {project && project.owner ? project.owner : '-'}
@@ -187,12 +194,31 @@ function Main({ createProject, projects }) {
                   </ListGroup>
                 </Card.Body>
                 <Card.Footer className="bg-white">
-                  <Button
-                    style={{ color: 'white' }}
-                    variant={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
-                  >
-                    Donate
-                  </Button>
+                  <div className="row p-2">
+                    <div className="col-md-6">
+                      <div className="input-group mb-3">
+                        <div className="input-group-prepend">
+                          <span className="input-group-text" id="basic-addon1">
+                            <i className="fab fa-ethereum" style={{ fontSize: '1.5em' }} />
+                          </span>
+                        </div>
+                        <input type="text" className="form-control" id="myDonation" maxLength="9" />
+                      </div>
+                    </div>
+                    <div className="col-md-6">
+                      <Button
+                        name={project.id}
+                        style={{ color: 'white', float: 'left' }}
+                        variant={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
+                        onClick={(e) => {
+                          fundProject(e.target.name, document.getElementById('myDonation').value);
+                          document.getElementById('myDonation').value = '';
+                        }}
+                      >
+                        Donate
+                      </Button>
+                    </div>
+                  </div>
                 </Card.Footer>
               </Card>
             </div>
@@ -205,11 +231,13 @@ function Main({ createProject, projects }) {
 
 Main.propTypes = {
   createProject: PropTypes.func,
+  fundProject: PropTypes.func,
   projects: PropTypes.arrayOf(PropTypes.object),
 };
 
 Main.defaultProps = {
   createProject: null,
+  fundProject: null,
   projects: [],
 };
 

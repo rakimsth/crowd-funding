@@ -109,6 +109,31 @@ function App() {
     }
   };
 
+  const fundProject = async (id, amount) => {
+    setLoading(true);
+    try {
+      crowdFunding.methods
+        .fundProject(id)
+        .send({ from: currentAccount, value: amount })
+        .once('receipt', async (receipt) => {
+          await getDatafromWeb3();
+          setLoading(false);
+        })
+        .catch((e) => {
+          let err;
+          if (e.code === -32603) err = "Owner can't fund the project created by themselves";
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: err || e.message,
+          });
+          setLoading(false);
+        });
+    } catch (e) {
+      setLoading(false);
+    }
+  };
+
   useEffect(async () => {
     await loadWeb3();
     await getDatafromWeb3();
@@ -132,7 +157,11 @@ function App() {
             {/* <h1 className="text-center">
               Crowd Funding Application using Solidity, Web3.js and Ethereum
             </h1> */}
-            {loading ? <Loader /> : <Main createProject={createProject} projects={projects} />}
+            {loading ? (
+              <Loader />
+            ) : (
+              <Main createProject={createProject} fundProject={fundProject} projects={projects} />
+            )}
           </main>
         </div>
       </div>
