@@ -15,6 +15,7 @@ import {
   ListGroupItem,
   Dropdown,
   DropdownButton,
+  Alert,
 } from 'react-bootstrap';
 
 function Main({ closeProject, createProject, fundProject, projects }) {
@@ -142,117 +143,127 @@ function Main({ closeProject, createProject, fundProject, projects }) {
       </div>
       <div className="container-fluid justify-content-center">
         <div className="row text-center">
-          {updatedProject.map((project) => (
-            <div className="col-md-4" key={project.id}>
-              <Card
-                border={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
-                className="m-2"
-              >
-                <Card.Body>
-                  {project && project.exists ? (
-                    <span
-                      className="btn btn-success"
-                      style={{ position: 'absolute', top: '7px', left: '-10px' }}
-                    >
-                      Open
-                    </span>
-                  ) : (
-                    <span
-                      className="btn btn-danger"
-                      style={{ position: 'absolute', top: '7px', left: '-10px' }}
-                    >
-                      Closed
-                    </span>
-                  )}
-                  <Card.Title>{project && project.name ? project.name.toString() : '-'}</Card.Title>
-                  <Card.Text>
-                    <em>{project && project.desc ? project.desc.toString() : '0'}</em>
-                  </Card.Text>
-                  <ProgressBar animated now={project.percent} label={`${project.percent}%`} />
-                  <ListGroup className="list-group-flush">
-                    <ListGroupItem>
-                      {project && project.daysLeft && project.daysLeft >= 0
-                        ? project.daysLeft
-                        : '-'}
-                      <em> Days Left</em>
-                    </ListGroupItem>
-                    <ListGroupItem>
-                      Target/Collected:&nbsp;
-                      {project && project.target && project.balance
-                        ? `${window.web3.utils.fromWei(project.target, 'Ether')}
+          {updatedProject && updatedProject.length > 0 ? (
+            updatedProject.map((project) => (
+              <div className="col-md-4" key={project.id}>
+                <Card
+                  border={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
+                  className="m-2"
+                >
+                  <Card.Body>
+                    {project && project.exists ? (
+                      <span
+                        className="btn btn-success"
+                        style={{ position: 'absolute', top: '7px', left: '-10px' }}
+                      >
+                        Open
+                      </span>
+                    ) : (
+                      <span
+                        className="btn btn-danger"
+                        style={{ position: 'absolute', top: '7px', left: '-10px' }}
+                      >
+                        Closed
+                      </span>
+                    )}
+                    <Card.Title>
+                      {project && project.name ? project.name.toString() : '-'}
+                    </Card.Title>
+                    <Card.Text>
+                      <em>{project && project.desc ? project.desc.toString() : '0'}</em>
+                    </Card.Text>
+                    <ProgressBar animated now={project.percent} label={`${project.percent}%`} />
+                    <ListGroup className="list-group-flush">
+                      <ListGroupItem>
+                        {project && project.daysLeft && project.daysLeft >= 0
+                          ? project.daysLeft
+                          : '-'}
+                        <em> Days Left</em>
+                      </ListGroupItem>
+                      <ListGroupItem>
+                        Target/Collected:&nbsp;
+                        {project && project.target && project.balance
+                          ? `${window.web3.utils.fromWei(project.target, 'Ether')}
                         / ${String(project.balance)}`
-                        : '-'}
-                      <em> Ethers</em>
-                    </ListGroupItem>
-                    <ListGroupItem>
-                      <small className="text-muted">
-                        <em style={{ fontSize: '0.9em' }}>
-                          Organized By: {project && project.owner ? project.owner : '-'}
-                        </em>
-                      </small>
-                    </ListGroupItem>
-                  </ListGroup>
-                </Card.Body>
-                {project && project.exists ? (
-                  <Card.Footer className="bg-white">
-                    <div className="row p-2">
-                      <div className="col-md-6">
-                        <div className="input-group mb-3">
-                          <div className="input-group-prepend">
-                            <span className="input-group-text" id="basic-addon1">
-                              <i className="fab fa-ethereum" style={{ fontSize: '1.5em' }} />
-                            </span>
+                          : '-'}
+                        <em> Ethers</em>
+                      </ListGroupItem>
+                      <ListGroupItem>
+                        <small className="text-muted">
+                          <em style={{ fontSize: '0.9em' }}>
+                            Organized By: {project && project.owner ? project.owner : '-'}
+                          </em>
+                        </small>
+                      </ListGroupItem>
+                    </ListGroup>
+                  </Card.Body>
+                  {project && project.exists ? (
+                    <Card.Footer className="bg-white">
+                      <div className="row p-2">
+                        <div className="col-md-6">
+                          <div className="input-group mb-3">
+                            <div className="input-group-prepend">
+                              <span className="input-group-text" id="basic-addon1">
+                                <i className="fab fa-ethereum" style={{ fontSize: '1.5em' }} />
+                              </span>
+                            </div>
+                            <input
+                              type="text"
+                              className="form-control"
+                              id={project.id}
+                              name={project.id}
+                              maxLength="9"
+                            />
                           </div>
-                          <input
-                            type="text"
-                            className="form-control"
-                            id={project.id}
-                            name={project.id}
-                            maxLength="9"
-                          />
                         </div>
-                      </div>
-                      <div className="col-md-6">
-                        <Button
-                          name={project.id}
-                          style={{ color: 'white', float: 'left' }}
-                          variant={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
-                          onClick={(e) => {
-                            fundProject(
-                              e.target.name,
-                              document.getElementById(`${project.id}`).value,
-                            );
-                            document.getElementById(`${project.id}`).value = '';
-                          }}
-                        >
-                          Donate
-                        </Button>
-                        <DropdownButton
-                          id="dropdown-basic"
-                          variant="light"
-                          title=""
-                          className="float-right"
-                          style={{ marginLeft: '80%' }}
-                        >
-                          <Dropdown.Item
-                            as="button"
+                        <div className="col-md-6">
+                          <Button
                             name={project.id}
+                            style={{ color: 'white', float: 'left' }}
+                            variant={
+                              borderDesigns[Math.floor(Math.random() * borderDesigns.length)]
+                            }
                             onClick={(e) => {
-                              closeProject(e.target.name);
+                              fundProject(
+                                e.target.name,
+                                document.getElementById(`${project.id}`).value,
+                              );
+                              document.getElementById(`${project.id}`).value = '';
                             }}
                           >
-                            Close Project
-                          </Dropdown.Item>
-                        </DropdownButton>
+                            Donate
+                          </Button>
+                          <DropdownButton
+                            id="dropdown-basic"
+                            variant="light"
+                            title=""
+                            className="float-right"
+                            style={{ marginLeft: '80%' }}
+                          >
+                            <Dropdown.Item
+                              as="button"
+                              name={project.id}
+                              onClick={(e) => {
+                                closeProject(e.target.name);
+                              }}
+                            >
+                              Close Project
+                            </Dropdown.Item>
+                          </DropdownButton>
+                        </div>
                       </div>
-                    </div>
-                  </Card.Footer>
-                ) : (
-                  ''
-                )}
-              </Card>
+                    </Card.Footer>
+                  ) : (
+                    ''
+                  )}
+                </Card>
+              </div>
+            ))
+          ) : (
+            <div className="p-4">
+              <Alert variant="danger">No Projects Found!</Alert>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
