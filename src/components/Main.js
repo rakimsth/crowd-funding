@@ -143,11 +143,10 @@ function Main({ createProject, fundProject, projects }) {
       <div className="container-fluid justify-content-center">
         <div className="row text-center">
           {updatedProject.map((project) => (
-            <div className="col-md-4">
+            <div className="col-md-4" key={project.id}>
               <Card
                 border={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
                 className="m-2"
-                key={project.id}
               >
                 <Card.Body>
                   {project && project.exists ? (
