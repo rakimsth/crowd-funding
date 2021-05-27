@@ -4,9 +4,10 @@ import { Row, Col } from 'react-bootstrap';
 
 function Main() {
   return (
-    <div id="content">
+    <div id="content" className="mt-2">
       <h1>Add Project</h1>
       <form
+        id="addNewProject"
         onSubmit={(event) => {
           event.preventDefault();
         }}
@@ -62,6 +63,7 @@ function Main() {
         <button type="submit" className="btn btn-primary">
           Add Project
         </button>
+        <input className="btn btn-danger m-2" type="reset" value="Reset" />
       </form>
       <p>&nbsp;</p>
       <h2>Fund Project</h2>

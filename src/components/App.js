@@ -76,7 +76,7 @@ function App() {
   return (
     <div>
       <Navbar account={currentAccount || ''} />
-      <div className="container-fluid mt-5">
+      <div className="container mt-5">
         <div className="row">
           <main className="col-lg-12">{loading ? <Loader /> : <Main />}</main>
         </div>
