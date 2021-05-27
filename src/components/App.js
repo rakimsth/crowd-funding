@@ -1,11 +1,21 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
 import React, { useState, useEffect } from 'react';
-import { Button } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 import './App.css';
 import Web3 from 'web3';
+import Navbar from './Navbar';
+import Main from './Main';
+import Loader from '../global/Loader';
+// Blockchain stuff
+import CrowdFunding from '../abis/Crowdfunding.json';
 
 function App() {
-  const [currentAccount, setCurrentAccount] = useState('');
+  const [currentAccount, setCurrentAccount] = useState("");
+  const [projectCount, setProjectCount] = useState(0);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [crowdFunding, setCrowdFunding] = useState(null);
 
   const loadWeb3 = async () => {
     // Modern dapp browsers...
@@ -14,14 +24,22 @@ function App() {
       try {
         await window.ethereum.enable();
       } catch (error) {
-        window.alert('User Rejected the Request');
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'User Rejected the Request!',
+        });
       }
     }
     // Legacy dapp Browser...
     else if (window.web3) {
       window.web3 = new Web3(window.web3.currentProvider);
     } else {
-      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Non-Ethereum browser detected. You should consider trying MetaMask!',
+      });
     }
   };
 
@@ -29,6 +47,23 @@ function App() {
     const { web3 } = window;
     // Load Accounts
     const accounts = await web3.eth.getAccounts();
+    // Get networkId
+    const networkId = await web3.eth.net.getId();
+    const networkData = CrowdFunding.networks[networkId];
+    // Get abi Data from ABI json file
+    try{
+      const {abi} = CrowdFunding;
+      const {address} = networkData;
+      const marketplace = new web3.eth.Contract(abi, address);
+      setCrowdFunding({marketplace});
+      setLoading(false);
+    } catch (e){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Contract not deployed to detected Network!',
+      })
+    }
     // Set current Account to State
     setCurrentAccount(accounts[0]);
   };
@@ -40,25 +75,11 @@ function App() {
 
   return (
     <div>
-      <nav className="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-1 shadow">
-        <a
-          className="navbar-brand col-sm-3 col-md-2 mr-0"
-          href="https://rumsan.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Rumsan Academy
-        </a>
-        {currentAccount ? (
-          <Button variant="light">{currentAccount}</Button>
-        ) : (
-          <Button variant="danger">N/A</Button>
-        )}
-      </nav>
+      <Navbar account={currentAccount || ''}/>
       <div className="container-fluid mt-5">
         <div className="row">
-          <main role="main" className="col-lg-12 d-flex text-center">
-            <div className="content mr-auto ml-auto" />
+          <main className="col-lg-12">
+            { loading ? <Loader />: <Main />}
           </main>
         </div>
       </div>
