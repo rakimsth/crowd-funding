@@ -13,9 +13,11 @@ import {
   ProgressBar,
   ListGroup,
   ListGroupItem,
+  Dropdown,
+  DropdownButton,
 } from 'react-bootstrap';
 
-function Main({ createProject, fundProject, projects }) {
+function Main({ closeProject, createProject, fundProject, projects }) {
   const updatedProject = projects.map((p) => {
     p.percent = p.balance
       ? Math.round((Number(p.balance) / Number(window.web3.utils.fromWei(p.target, 'ether'))) * 100)
@@ -36,14 +38,9 @@ function Main({ createProject, fundProject, projects }) {
   const endDateRef = React.useRef();
   const targetRef = React.useRef();
   const [targetAmt, setTargetAmt] = useState('');
-  const [donationAmt, setDonationAmt] = useState('');
   const handleTargetChange = (evt) => {
     const decimalPattern = /^[+-]?\d*(?:[.,]\d*)?$/;
     if (decimalPattern.test(evt.target.value)) setTargetAmt(evt.target.value);
-  };
-  const handleDonationAmtChange = (evt) => {
-    const decimalPattern = /^[+-]?\d*(?:[.,]\d*)?$/;
-    if (decimalPattern.test(evt.target.value)) setDonationAmt(evt.target.value);
   };
 
   return (
@@ -208,11 +205,9 @@ function Main({ createProject, fundProject, projects }) {
                         <input
                           type="text"
                           className="form-control"
-                          id="myDonation"
+                          id={project.id}
+                          name={project.id}
                           maxLength="9"
-                          pattern="[+-]?\d+(?:[.,]\d+)?"
-                          onChange={(e) => handleDonationAmtChange(e)}
-                          value={donationAmt}
                         />
                       </div>
                     </div>
@@ -222,12 +217,32 @@ function Main({ createProject, fundProject, projects }) {
                         style={{ color: 'white', float: 'left' }}
                         variant={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
                         onClick={(e) => {
-                          fundProject(e.target.name, document.getElementById('myDonation').value);
-                          document.getElementById('myDonation').value = '';
+                          fundProject(
+                            e.target.name,
+                            document.getElementById(`${project.id}`).value,
+                          );
+                          document.getElementById(`${project.id}`).value = '';
                         }}
                       >
                         Donate
                       </Button>
+                      <DropdownButton
+                        id="dropdown-basic"
+                        variant="light"
+                        title=""
+                        className="float-right"
+                        style={{ marginLeft: '80%' }}
+                      >
+                        <Dropdown.Item
+                          as="button"
+                          name={project.id}
+                          onClick={(e) => {
+                            closeProject(e.target.name);
+                          }}
+                        >
+                          Close Project
+                        </Dropdown.Item>
+                      </DropdownButton>
                     </div>
                   </div>
                 </Card.Footer>
@@ -243,12 +258,14 @@ function Main({ createProject, fundProject, projects }) {
 Main.propTypes = {
   createProject: PropTypes.func,
   fundProject: PropTypes.func,
+  closeProject: PropTypes.func,
   projects: PropTypes.arrayOf(PropTypes.object),
 };
 
 Main.defaultProps = {
   createProject: null,
   fundProject: null,
+  closeProject: null,
   projects: [],
 };
 

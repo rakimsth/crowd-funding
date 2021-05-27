@@ -134,6 +134,31 @@ function App() {
     }
   };
 
+  const closeProject = async (id) => {
+    setLoading(true);
+    try {
+      crowdFunding.methods
+        .closeProject(id)
+        .send({ from: currentAccount })
+        .once('receipt', async (receipt) => {
+          await getDatafromWeb3();
+          setLoading(false);
+        })
+        .catch((e) => {
+          let err;
+          if (e.code === -32603) err = 'Only Project Owner can close this project.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: err || e.message,
+          });
+          setLoading(false);
+        });
+    } catch (e) {
+      setLoading(false);
+    }
+  };
+
   useEffect(async () => {
     await loadWeb3();
     await getDatafromWeb3();
@@ -160,7 +185,12 @@ function App() {
             {loading ? (
               <Loader />
             ) : (
-              <Main createProject={createProject} fundProject={fundProject} projects={projects} />
+              <Main
+                createProject={createProject}
+                fundProject={fundProject}
+                projects={projects}
+                closeProject={closeProject}
+              />
             )}
           </main>
         </div>

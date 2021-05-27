@@ -6,3 +6,12 @@ body {
 }
 
 /* Custom CSS */
+
+
+#dropdown-basic:after {
+  border: 0;
+  font-family: FontAwesome;
+  content:"\f142";
+  display: inline-block;
+  vertical-align: middle;
+}
