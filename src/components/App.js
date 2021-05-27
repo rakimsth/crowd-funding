@@ -1,3 +1,5 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-await-in-loop */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
 import React, { useState, useEffect } from 'react';
@@ -12,10 +14,9 @@ import CrowdFunding from '../abis/Crowdfunding.json';
 
 function App() {
   const [currentAccount, setCurrentAccount] = useState('');
-  const [projectCount, setProjectCount] = useState(0);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [crowdFunding, setCrowdFunding] = useState(null);
+  const [crowdFunding, setCrowdFunding] = useState({});
 
   const loadWeb3 = async () => {
     // Modern dapp browsers...
@@ -49,43 +50,53 @@ function App() {
   };
 
   const getDatafromWeb3 = async () => {
-    const { web3 } = window;
-    // Load Accounts
-    const accounts = await web3.eth.getAccounts();
-    // Get networkId
-    const networkId = await web3.eth.net.getId();
-    const networkData = CrowdFunding.networks[networkId];
-    // Get abi Data from ABI json file
-    try {
-      const { abi } = CrowdFunding;
-      const { address } = networkData;
-      const marketplace = new web3.eth.Contract(abi, address);
-      setCrowdFunding({ marketplace });
-      setLoading(false);
-    } catch (e) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Contract not deployed to detected Network!',
-      });
+    if (window.web3) {
+      const { web3 } = window;
+      // Load Accounts
+      const accounts = await web3.eth.getAccounts();
+      // Get networkId
+      const networkId = await web3.eth.net.getId();
+      const networkData = CrowdFunding.networks[networkId];
+      // Get abi Data from ABI json file
+      try {
+        const { abi } = CrowdFunding;
+        const { address } = networkData;
+        const marketplace = new web3.eth.Contract(abi, address);
+        setCrowdFunding({ ...marketplace });
+        const projectCounter = await marketplace.methods.projectCount().call();
+        const projectLists = [];
+        for (let i = 1; i <= projectCounter; i++) {
+          const project = await marketplace.methods.projects(i).call();
+          projectLists.push(project);
+        }
+        setProjects(projectLists);
+        setLoading(false);
+      } catch (e) {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Contract not deployed to detected Network!',
+        });
+      }
+      // Set current Account to State
+      setCurrentAccount(accounts[0]);
     }
-    // Set current Account to State
-    setCurrentAccount(accounts[0]);
   };
 
   const createProject = async (name, desc, target, closingDate) => {
     setLoading(true);
-    crowdFunding.marketplace.methods
+    crowdFunding.methods
       .createProject(name, desc, target, closingDate)
       .send({ from: currentAccount })
-      .once('receipt', (receipt) => {
+      .once('receipt', async (receipt) => {
+        await getDatafromWeb3();
         setLoading(false);
       });
   };
 
-  useEffect(() => {
-    loadWeb3();
-    getDatafromWeb3();
+  useEffect(async () => {
+    await loadWeb3();
+    await getDatafromWeb3();
   }, []);
 
   return (
@@ -97,7 +108,7 @@ function App() {
             <h1 className="text-center">
               Crowd Funding Application using Solidity, Web3.js and Ethereum
             </h1>
-            {loading ? <Loader /> : <Main createProject={createProject} />}
+            {loading ? <Loader /> : <Main createProject={createProject} projects={projects} />}
           </main>
         </div>
       </div>

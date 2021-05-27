@@ -4,13 +4,12 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 
-function Main({ createProject }) {
+function Main({ createProject, projects }) {
   const nameRef = React.useRef();
   const descRef = React.useRef();
   const endDateRef = React.useRef();
   const targetRef = React.useRef();
   const [targetAmt, setTargetAmt] = useState('');
-
   const handleTargetChange = (evt) => {
     const decimalPattern = /^[+-]?\d*(?:[.,]\d*)?$/;
     if (decimalPattern.test(evt.target.value)) setTargetAmt(evt.target.value);
@@ -98,12 +97,32 @@ function Main({ createProject }) {
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Target</th>
+            <th scope="col">Target(Eth.)</th>
+            <th scope="col">Close Date</th>
             <th scope="col">Owner</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
-        <tbody id="projectList" />
+        <tbody id="projectList">
+          {projects.map((project, key) => (
+            <tr key={project.id}>
+              <th scope="row">{project && project.id ? project.id.toString() : '-'}</th>
+              <td>{project && project.name ? project.name.toString() : '-'}</td>
+              <td>
+                {project && project.target
+                  ? window.web3.utils.fromWei(project.target, 'ether')
+                  : '-'}
+              </td>
+              <td>
+                {project && project.endDate
+                  ? new Date(Number(project.endDate)).toLocaleString()
+                  : '-'}
+              </td>
+              <td>{project && project.owner ? project.owner.toString() : '-'}</td>
+              <td>BUTTON</td>
+            </tr>
+          ))}
+        </tbody>
       </table>
     </div>
   );
@@ -111,9 +130,12 @@ function Main({ createProject }) {
 
 Main.propTypes = {
   createProject: PropTypes.func,
+  projects: PropTypes.arrayOf(PropTypes.object),
 };
 
 Main.defaultProps = {
   createProject: null,
+  projects: [],
 };
+
 export default Main;
