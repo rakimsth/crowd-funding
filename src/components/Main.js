@@ -17,11 +17,9 @@ import {
 
 function Main({ createProject, fundProject, projects }) {
   const updatedProject = projects.map((p) => {
-    p.percent = Math.round(
-      (p.balance
-        ? Number(window.web3.utils.fromWei(p.balance, 'ether'))
-        : 0 / Number(window.web3.utils.fromWei(p.target, 'ether'))) * 100,
-    );
+    p.percent = p.balance
+      ? Math.round((Number(p.balance) / Number(window.web3.utils.fromWei(p.target, 'ether'))) * 100)
+      : 0;
     p.daysLeft = p.endDate
       ? Math.ceil((Number(p.endDate) - new Date().getTime()) / 1000 / 60 / 60 / 24)
       : '0';
@@ -38,9 +36,14 @@ function Main({ createProject, fundProject, projects }) {
   const endDateRef = React.useRef();
   const targetRef = React.useRef();
   const [targetAmt, setTargetAmt] = useState('');
+  const [donationAmt, setDonationAmt] = useState('');
   const handleTargetChange = (evt) => {
     const decimalPattern = /^[+-]?\d*(?:[.,]\d*)?$/;
     if (decimalPattern.test(evt.target.value)) setTargetAmt(evt.target.value);
+  };
+  const handleDonationAmtChange = (evt) => {
+    const decimalPattern = /^[+-]?\d*(?:[.,]\d*)?$/;
+    if (decimalPattern.test(evt.target.value)) setDonationAmt(evt.target.value);
   };
 
   return (
@@ -177,16 +180,17 @@ function Main({ createProject, fundProject, projects }) {
                       <em> Days Left</em>
                     </ListGroupItem>
                     <ListGroupItem>
-                      Target:&nbsp;
-                      {project && project.target
-                        ? window.web3.utils.fromWei(project.target, 'Ether')
+                      Target/Collected:&nbsp;
+                      {project && project.target && project.balance
+                        ? `${window.web3.utils.fromWei(project.target, 'Ether')}
+                        / ${String(project.balance)}`
                         : '-'}
                       <em> Ethers</em>
                     </ListGroupItem>
                     <ListGroupItem>
                       <small className="text-muted">
                         <em style={{ fontSize: '0.9em' }}>
-                          By: {project && project.owner ? project.owner : '-'}
+                          Organized By: {project && project.owner ? project.owner : '-'}
                         </em>
                       </small>
                     </ListGroupItem>
@@ -201,7 +205,15 @@ function Main({ createProject, fundProject, projects }) {
                             <i className="fab fa-ethereum" style={{ fontSize: '1.5em' }} />
                           </span>
                         </div>
-                        <input type="text" className="form-control" id="myDonation" maxLength="9" />
+                        <input
+                          type="text"
+                          className="form-control"
+                          id="myDonation"
+                          maxLength="9"
+                          pattern="[+-]?\d+(?:[.,]\d+)?"
+                          onChange={(e) => handleDonationAmtChange(e)}
+                          value={donationAmt}
+                        />
                       </div>
                     </div>
                     <div className="col-md-6">

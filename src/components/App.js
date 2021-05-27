@@ -57,6 +57,8 @@ function App() {
       const { web3 } = window;
       // Load Accounts
       const accounts = await web3.eth.getAccounts();
+      // Set current Account to State
+      setCurrentAccount(accounts[0]);
       // Get networkId
       const networkId = await web3.eth.net.getId();
       const networkData = CrowdFunding.networks[networkId];
@@ -81,8 +83,6 @@ function App() {
           text: 'Contract not deployed to detected Network!',
         });
       }
-      // Set current Account to State
-      setCurrentAccount(accounts[0]);
     }
   };
 
