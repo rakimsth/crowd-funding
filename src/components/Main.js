@@ -150,6 +150,21 @@ function Main({ createProject, projects }) {
                 key={project.id}
               >
                 <Card.Body>
+                  {project && project.exists ? (
+                    <span
+                      className="btn btn-success"
+                      style={{ position: 'absolute', top: '7px', left: '-10px' }}
+                    >
+                      Open
+                    </span>
+                  ) : (
+                    <span
+                      className="btn btn-danger"
+                      style={{ position: 'absolute', top: '7px', left: '-10px' }}
+                    >
+                      Closed
+                    </span>
+                  )}
                   <Card.Title>{project && project.name ? project.name.toString() : '-'}</Card.Title>
                   <Card.Text>
                     <em>{project && project.desc ? project.desc.toString() : '0'}</em>
