@@ -1,14 +1,17 @@
+/* eslint-disable max-len */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-alert */
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
+import { Container, Jumbotron } from 'react-bootstrap';
 import './App.css';
 import Web3 from 'web3';
 import Navbar from './Navbar';
 import Main from './Main';
 import Loader from '../global/Loader';
+import bgimage from '../assets/crowfunding.jpg';
 // Blockchain stuff
 import CrowdFunding from '../abis/Crowdfunding.json';
 
@@ -85,13 +88,25 @@ function App() {
 
   const createProject = async (name, desc, target, closingDate) => {
     setLoading(true);
-    crowdFunding.methods
-      .createProject(name, desc, target, closingDate)
-      .send({ from: currentAccount })
-      .once('receipt', async (receipt) => {
-        await getDatafromWeb3();
-        setLoading(false);
-      });
+    try {
+      crowdFunding.methods
+        .createProject(name, desc, target, closingDate)
+        .send({ from: currentAccount })
+        .once('receipt', async (receipt) => {
+          await getDatafromWeb3();
+          setLoading(false);
+        })
+        .catch((e) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: e.message,
+          });
+          setLoading(false);
+        });
+    } catch (e) {
+      setLoading(false);
+    }
   };
 
   useEffect(async () => {
@@ -105,9 +120,18 @@ function App() {
       <div className="container mt-5">
         <div className="row">
           <main className="col-lg-12">
-            <h1 className="text-center">
+            <div
+              className="p-md-5 mb-4 text-white rounded"
+              style={{
+                backgroundImage: `url(${bgimage})`,
+                height: '400px',
+                backgroundRepeat: 'no-repeat',
+                backgroundSize: 'cover',
+              }}
+            />
+            {/* <h1 className="text-center">
               Crowd Funding Application using Solidity, Web3.js and Ethereum
-            </h1>
+            </h1> */}
             {loading ? <Loader /> : <Main createProject={createProject} projects={projects} />}
           </main>
         </div>
