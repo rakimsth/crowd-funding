@@ -193,59 +193,63 @@ function Main({ closeProject, createProject, fundProject, projects }) {
                     </ListGroupItem>
                   </ListGroup>
                 </Card.Body>
-                <Card.Footer className="bg-white">
-                  <div className="row p-2">
-                    <div className="col-md-6">
-                      <div className="input-group mb-3">
-                        <div className="input-group-prepend">
-                          <span className="input-group-text" id="basic-addon1">
-                            <i className="fab fa-ethereum" style={{ fontSize: '1.5em' }} />
-                          </span>
+                {project && project.exists ? (
+                  <Card.Footer className="bg-white">
+                    <div className="row p-2">
+                      <div className="col-md-6">
+                        <div className="input-group mb-3">
+                          <div className="input-group-prepend">
+                            <span className="input-group-text" id="basic-addon1">
+                              <i className="fab fa-ethereum" style={{ fontSize: '1.5em' }} />
+                            </span>
+                          </div>
+                          <input
+                            type="text"
+                            className="form-control"
+                            id={project.id}
+                            name={project.id}
+                            maxLength="9"
+                          />
                         </div>
-                        <input
-                          type="text"
-                          className="form-control"
-                          id={project.id}
-                          name={project.id}
-                          maxLength="9"
-                        />
                       </div>
-                    </div>
-                    <div className="col-md-6">
-                      <Button
-                        name={project.id}
-                        style={{ color: 'white', float: 'left' }}
-                        variant={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
-                        onClick={(e) => {
-                          fundProject(
-                            e.target.name,
-                            document.getElementById(`${project.id}`).value,
-                          );
-                          document.getElementById(`${project.id}`).value = '';
-                        }}
-                      >
-                        Donate
-                      </Button>
-                      <DropdownButton
-                        id="dropdown-basic"
-                        variant="light"
-                        title=""
-                        className="float-right"
-                        style={{ marginLeft: '80%' }}
-                      >
-                        <Dropdown.Item
-                          as="button"
+                      <div className="col-md-6">
+                        <Button
                           name={project.id}
+                          style={{ color: 'white', float: 'left' }}
+                          variant={borderDesigns[Math.floor(Math.random() * borderDesigns.length)]}
                           onClick={(e) => {
-                            closeProject(e.target.name);
+                            fundProject(
+                              e.target.name,
+                              document.getElementById(`${project.id}`).value,
+                            );
+                            document.getElementById(`${project.id}`).value = '';
                           }}
                         >
-                          Close Project
-                        </Dropdown.Item>
-                      </DropdownButton>
+                          Donate
+                        </Button>
+                        <DropdownButton
+                          id="dropdown-basic"
+                          variant="light"
+                          title=""
+                          className="float-right"
+                          style={{ marginLeft: '80%' }}
+                        >
+                          <Dropdown.Item
+                            as="button"
+                            name={project.id}
+                            onClick={(e) => {
+                              closeProject(e.target.name);
+                            }}
+                          >
+                            Close Project
+                          </Dropdown.Item>
+                        </DropdownButton>
+                      </div>
                     </div>
-                  </div>
-                </Card.Footer>
+                  </Card.Footer>
+                ) : (
+                  ''
+                )}
               </Card>
             </div>
           ))}

@@ -121,7 +121,7 @@ contract Crowdfunding {
     // Check if the owner is trying to fund and reject it
     require(_owner != msg.sender, "Owner can't fund the project created by themselves.");
     // Make Sure the Project is active
-    require(_project.exists);
+    require(_project.exists, 'Project Campaign has ended.');
     //Sent ether must be greater than 0
     require(msg.value > 0);
     // Fund it
