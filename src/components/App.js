@@ -68,6 +68,16 @@ function App() {
     setCurrentAccount(accounts[0]);
   };
 
+  const createProject = async (name, desc, target, closingDate) => {
+    setLoading(true);
+    crowdFunding.marketplace.methods
+      .createProject(name, desc, target, closingDate)
+      .send({ from: currentAccount })
+      .once('receipt', (receipt) => {
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     loadWeb3();
     getDatafromWeb3();
@@ -78,7 +88,7 @@ function App() {
       <Navbar account={currentAccount || ''} />
       <div className="container mt-5">
         <div className="row">
-          <main className="col-lg-12">{loading ? <Loader /> : <Main />}</main>
+          <main className="col-lg-12">{loading ? <Loader /> : <Main createProject={createProject} />}</main>
         </div>
       </div>
     </div>

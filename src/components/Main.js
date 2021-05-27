@@ -1,8 +1,21 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Row, Col } from 'react-bootstrap';
 
-function Main() {
+function Main({ createProject }) {
+  const nameRef = React.useRef();
+  const descRef = React.useRef();
+  const endDateRef = React.useRef();
+  const targetRef = React.useRef();
+  const [targetAmt, setTargetAmt] = useState('');
+
+  const handleTargetChange = (evt) => {
+    const decimalPattern = /^[+-]?\d*(?:[.,]\d*)?$/;
+    if (decimalPattern.test(evt.target.value)) setTargetAmt(evt.target.value);
+  };
+
   return (
     <div id="content" className="mt-2">
       <h1>Add Project</h1>
@@ -10,6 +23,11 @@ function Main() {
         id="addNewProject"
         onSubmit={(event) => {
           event.preventDefault();
+          const name = nameRef.current.value;
+          const desc = descRef.current.value;
+          const closingDate = new Date(endDateRef.current.value).valueOf();
+          const target = window.web3.utils.toWei(targetRef.current.value.toString(), 'Ether');
+          createProject(name, desc, closingDate, target);
         }}
       >
         <Row>
@@ -19,6 +37,7 @@ function Main() {
               <input
                 id="projectName"
                 type="text"
+                ref={nameRef}
                 className="form-control"
                 placeholder="Project Name"
                 required
@@ -32,6 +51,7 @@ function Main() {
                 id="closingDate"
                 className="form-control"
                 type="datetime-local"
+                ref={endDateRef}
                 placeholder="Closing Date"
                 required
               />
@@ -43,8 +63,13 @@ function Main() {
               <input
                 id="projectTarget"
                 type="text"
+                ref={targetRef}
                 className="form-control"
                 placeholder="Project Target"
+                maxLength={9}
+                pattern="[+-]?\d+(?:[.,]\d+)?"
+                onChange={(e) => handleTargetChange(e)}
+                value={targetAmt}
                 required
               />
             </div>
@@ -55,6 +80,7 @@ function Main() {
           <input
             id="projectDesc"
             type="text"
+            ref={descRef}
             className="form-control"
             placeholder="Project Description"
             required
@@ -83,4 +109,11 @@ function Main() {
   );
 }
 
+Main.propTypes = {
+  createProject: PropTypes.func,
+};
+
+Main.defaultProps = {
+  createProject: null,
+};
 export default Main;
