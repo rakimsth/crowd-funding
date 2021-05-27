@@ -23,6 +23,11 @@ function App() {
       window.web3 = new Web3(window.ethereum);
       try {
         await window.ethereum.enable();
+        const { web3 } = window;
+        // Load Accounts
+        const accounts = await web3.eth.getAccounts();
+        // Set current Account to State
+        setCurrentAccount(accounts[0]);
       } catch (error) {
         Swal.fire({
           icon: 'error',
