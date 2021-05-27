@@ -89,6 +89,9 @@ function App() {
       <div className="container mt-5">
         <div className="row">
           <main className="col-lg-12">
+            <h1 className="text-center">
+              Crowd Funding Application using Solidity, Web3.js and Ethereum
+            </h1>
             {loading ? <Loader /> : <Main createProject={createProject} />}
           </main>
         </div>

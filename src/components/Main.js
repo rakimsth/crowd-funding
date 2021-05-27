@@ -18,7 +18,7 @@ function Main({ createProject }) {
 
   return (
     <div id="content" className="mt-2">
-      <h1>Add Project</h1>
+      <h2>Add Project</h2>
       <form
         id="addNewProject"
         onSubmit={(event) => {
