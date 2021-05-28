@@ -117,10 +117,17 @@ contract('Crowdfunding', ([deployer, secondAcc]) => {
 
     it('close project', async () => {
       // SUCCESS TESTS
+      const previousBalanceOfOwner = await web3.eth.getBalance(deployer);
+      const previousBalancInEth = web3.utils.fromWei(previousBalanceOfOwner, 'Ether');
       const resultB = await crowdfunding.closeProject(projectCount, {
         from: deployer,
       });
+      const currentBalanceOfOwner = await web3.eth.getBalance(deployer);
+      const currentBalanceInEth = web3.utils.fromWei(currentBalanceOfOwner, 'Ether');
       const event = resultB.logs[0].args; // pull from result logs
+      const projectFund = web3.utils.fromWei(event.balance, 'Ether');
+      const differenceInBalance = currentBalanceInEth - previousBalancInEth;
+      assert.equal(projectFund, differenceInBalance, 'Correct Balance');
       assert.equal(event.id.toNumber(), projectCount.toNumber(), 'id is correct');
       assert.equal(event.name, 'Test Name', 'Name is correct');
       // FAILURE TESTS : Tries to fund a project that doesnt exists. ie. Project must have valid ID

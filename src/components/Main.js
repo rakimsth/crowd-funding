@@ -21,7 +21,11 @@ import {
 function Main({ closeProject, createProject, fundProject, projects }) {
   const updatedProject = projects.map((p) => {
     p.percent = p.balance
-      ? Math.round((Number(p.balance) / Number(window.web3.utils.fromWei(p.target, 'ether'))) * 100)
+      ? Math.round(
+          (Number(window.web3.utils.fromWei(p.balance, 'ether')) /
+            Number(window.web3.utils.fromWei(p.target, 'ether'))) *
+            100,
+        )
       : 0;
     p.daysLeft = p.endDate
       ? Math.ceil((Number(p.endDate) - new Date().getTime()) / 1000 / 60 / 60 / 24)
@@ -184,7 +188,7 @@ function Main({ closeProject, createProject, fundProject, projects }) {
                         Target/Collected:&nbsp;
                         {project && project.target && project.balance
                           ? `${window.web3.utils.fromWei(project.target, 'Ether')}
-                        / ${String(project.balance)}`
+                        / ${String(window.web3.utils.fromWei(project.balance, 'Ether'))}`
                           : '-'}
                         <em> Ethers</em>
                       </ListGroupItem>

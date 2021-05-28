@@ -155,13 +155,15 @@ contract Crowdfunding {
     // Check endDate
     if (block.timestamp > _project.endDate) {
       _project.exists = false;
-      projects[_id] = _project;
       this.dispatchFunds(_project.id);
+      projects[_id] = _project;
       emit ProjectEnded(_project.id, _project.name, _project.balance);
     }
-    require(block.timestamp < _project.endDate, 'Project is still active.');
+    require(block.timestamp <= _project.endDate, 'Project is still active.');
     // Close the project
     _project.exists = false;
+    // transfer the fund
+    this.dispatchFunds(_project.id);
     projects[_id] = _project;
     // Trigger the Event
     emit ProjectEnded(_project.id, _project.name, _project.balance);

@@ -112,9 +112,10 @@ function App() {
   const fundProject = async (id, amount) => {
     setLoading(true);
     try {
+      const WeiAmt = window.web3.utils.toWei(amount, 'Ether');
       crowdFunding.methods
         .fundProject(id)
-        .send({ from: currentAccount, value: amount })
+        .send({ from: currentAccount, value: WeiAmt })
         .once('receipt', async (receipt) => {
           await getDatafromWeb3();
           setLoading(false);
