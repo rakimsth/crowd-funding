@@ -1,6 +1,7 @@
 {
   "name": "crowd-funding",
   "version": "0.1.0",
+  "homepage": "http://rakimsth.github.io/crowd-funding",
   "description": "An Ethereum SC based Crowd Funding Platform",
   "author": "rakimsth@gmail.com",
   "private": true,
@@ -20,7 +21,9 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "pretty": "prettier --write **/*.js **/*.sol"
+    "pretty": "prettier --write **/*.js **/*.sol",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +54,7 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.23.2",
     "ganache-core": "^2.13.2",
+    "gh-pages": "^3.2.0",
     "husky": "4.3.8",
     "prettier": "^2.3.0",
     "prettier-plugin-solidity": "^1.0.0-beta.10"

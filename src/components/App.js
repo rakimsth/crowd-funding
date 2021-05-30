@@ -5,7 +5,6 @@
 /* eslint-disable no-alert */
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
-import { Container, Jumbotron } from 'react-bootstrap';
 import './App.css';
 import Web3 from 'web3';
 import Navbar from './Navbar';
@@ -59,13 +58,17 @@ function App() {
       const accounts = await web3.eth.getAccounts();
       // Set current Account to State
       setCurrentAccount(accounts[0]);
-      // Get networkId
-      const networkId = await web3.eth.net.getId();
-      const networkData = CrowdFunding.networks[networkId];
+      // Get networkId (enable this for ganache)
+      // const networkId = await web3.eth.net.getId();
+      // const networkData = CrowdFunding.networks[networkId];
       // Get abi Data from ABI json file
       try {
         const { abi } = CrowdFunding;
-        const { address } = networkData;
+        // let { address } = networkData;
+        let address;
+        if (process.env.REACT_APP_TESTNET_CONTRACT_ADDRESS)
+          address = process.env.REACT_APP_TESTNET_CONTRACT_ADDRESS;
+        // Deployed Binance Testnet Contract Address:0x68543df724508Bd8Af4361587cF0fE4E8f9298f1
         const marketplace = new web3.eth.Contract(abi, address);
         setCrowdFunding({ ...marketplace });
         const projectCounter = await marketplace.methods.projectCount().call();
@@ -180,9 +183,6 @@ function App() {
                 backgroundSize: 'cover',
               }}
             />
-            {/* <h1 className="text-center">
-              Crowd Funding Application using Solidity, Web3.js and Ethereum
-            </h1> */}
             {loading ? (
               <Loader />
             ) : (
