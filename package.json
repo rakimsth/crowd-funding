@@ -19,8 +19,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "yarn jest",
-    "test-coverage": "jest --coverage && coveralls < coverage/lcov.info",
+    "test": "yarn jest --coverage",
+    "test-coverage": "yarn test && shx cat ./coverage/lcov.info | node ./bin/coveralls.js --verbose",
     "eject": "react-scripts eject",
     "pretty": "prettier --write **/*.js **/*.sol",
     "predeploy": "npm run build",
