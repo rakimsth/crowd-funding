@@ -20,7 +20,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "coverage": "jest --coverage",
-    "send-coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
+    "send-coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls",
     "eject": "react-scripts eject",
     "pretty": "prettier --write **/*.js **/*.sol",
     "predeploy": "npm run build",
@@ -33,7 +33,7 @@
     ]
   },
   "jest": {
-    "coverageDirectory": "./tests/coverage",
+    "coverageDirectory": "./coverage",
     "collectCoverage": true
   },
   "browserslist": {
