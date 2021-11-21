@@ -15,7 +15,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-      - run: npm run build --if-present
 
   coverage:
     name: Coveralls
@@ -31,7 +30,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm install
-      - run: npm run build --if-present
       - run: npm run test-coverage
       - uses: coverallsapp/github-action@master
         env:
