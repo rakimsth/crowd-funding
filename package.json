@@ -20,7 +20,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "yarn jest",
-    "test-coverage": "jest --coverage",
+    "test-coverage": "jest --coverage && coveralls < coverage/lcov.info",
     "eject": "react-scripts eject",
     "pretty": "prettier --write **/*.js **/*.sol",
     "predeploy": "npm run build",
