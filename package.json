@@ -19,8 +19,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "yarn jest --coverage",
-    "test-coverage": "jest --coverage && cd ./tests/ | ./node_modules/coveralls/bin/coveralls.js",
+    "test": "jest --coverage",
+    "test-coverage": "jest --coverage && cat ./tests/coverage/lcov.info | coveralls",
     "eject": "react-scripts eject",
     "pretty": "prettier --write **/*.js **/*.sol",
     "predeploy": "npm run build",
@@ -33,7 +33,7 @@
     ]
   },
   "jest": {
-    "coverageDirectory": "./tests/",
+    "coverageDirectory": "./tests/coverage",
     "collectCoverage": true
   },
   "browserslist": {
