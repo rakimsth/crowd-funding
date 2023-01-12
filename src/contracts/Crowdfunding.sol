@@ -86,7 +86,9 @@ contract Crowdfunding {
     emit ProjectCreated(projectCount, _name, _desc, msg.sender, _endDate, true, 0, _target);
   }
 
-  function getProjectById(uint256 _id)
+  function getProjectById(
+    uint256 _id
+  )
     public
     view
     returns (

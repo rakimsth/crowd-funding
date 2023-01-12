@@ -278,7 +278,7 @@ Main.propTypes = {
   createProject: PropTypes.func,
   fundProject: PropTypes.func,
   closeProject: PropTypes.func,
-  projects: PropTypes.arrayOf(PropTypes.object),
+  projects: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 Main.defaultProps = {

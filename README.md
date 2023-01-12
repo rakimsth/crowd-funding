@@ -4,6 +4,10 @@
 
 - Join Binance Testnet to play around with the project in real time
 
+### Requirements
+
+Support up to Node Version 14.20.1 due to sass compiler break changes.
+
 ### Binance Test Network Setting:
 
 ---
