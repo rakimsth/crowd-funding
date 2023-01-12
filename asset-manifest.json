@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/crowd-funding/static/css/main.ad3240fe.chunk.css",
-    "main.js": "/crowd-funding/static/js/main.49341245.chunk.js",
-    "main.js.map": "/crowd-funding/static/js/main.49341245.chunk.js.map",
-    "runtime-main.js": "/crowd-funding/static/js/runtime-main.8474978d.js",
-    "runtime-main.js.map": "/crowd-funding/static/js/runtime-main.8474978d.js.map",
-    "static/css/2.61b4cb56.chunk.css": "/crowd-funding/static/css/2.61b4cb56.chunk.css",
-    "static/js/2.4f438fb0.chunk.js": "/crowd-funding/static/js/2.4f438fb0.chunk.js",
-    "static/js/2.4f438fb0.chunk.js.map": "/crowd-funding/static/js/2.4f438fb0.chunk.js.map",
+    "main.css": "/crowd-funding/static/css/main.ba09aba4.chunk.css",
+    "main.js": "/crowd-funding/static/js/main.9e992b53.chunk.js",
+    "main.js.map": "/crowd-funding/static/js/main.9e992b53.chunk.js.map",
+    "runtime-main.js": "/crowd-funding/static/js/runtime-main.9090c485.js",
+    "runtime-main.js.map": "/crowd-funding/static/js/runtime-main.9090c485.js.map",
+    "static/css/2.f26e749f.chunk.css": "/crowd-funding/static/css/2.f26e749f.chunk.css",
+    "static/js/2.50486221.chunk.js": "/crowd-funding/static/js/2.50486221.chunk.js",
+    "static/js/2.50486221.chunk.js.map": "/crowd-funding/static/js/2.50486221.chunk.js.map",
     "index.html": "/crowd-funding/index.html",
-    "static/css/2.61b4cb56.chunk.css.map": "/crowd-funding/static/css/2.61b4cb56.chunk.css.map",
-    "static/css/main.ad3240fe.chunk.css.map": "/crowd-funding/static/css/main.ad3240fe.chunk.css.map",
-    "static/js/2.4f438fb0.chunk.js.LICENSE.txt": "/crowd-funding/static/js/2.4f438fb0.chunk.js.LICENSE.txt",
+    "static/css/2.f26e749f.chunk.css.map": "/crowd-funding/static/css/2.f26e749f.chunk.css.map",
+    "static/css/main.ba09aba4.chunk.css.map": "/crowd-funding/static/css/main.ba09aba4.chunk.css.map",
+    "static/js/2.50486221.chunk.js.LICENSE.txt": "/crowd-funding/static/js/2.50486221.chunk.js.LICENSE.txt",
     "static/media/crowfunding.70a79183.jpg": "/crowd-funding/static/media/crowfunding.70a79183.jpg"
   },
   "entrypoints": [
-    "static/js/runtime-main.8474978d.js",
-    "static/css/2.61b4cb56.chunk.css",
-    "static/js/2.4f438fb0.chunk.js",
-    "static/css/main.ad3240fe.chunk.css",
-    "static/js/main.49341245.chunk.js"
+    "static/js/runtime-main.9090c485.js",
+    "static/css/2.f26e749f.chunk.css",
+    "static/js/2.50486221.chunk.js",
+    "static/css/main.ba09aba4.chunk.css",
+    "static/js/main.9e992b53.chunk.js"
   ]
 }
